@@ -1,0 +1,8 @@
+je_num,trans_type,inv_num,system_inv_num,trans_amt,inv_num_seq
+je_1,P_Expense,i001,P_i001,100,1
+je_2,P_Expense,i001,P_i001,,2
+je_3,R_Income,i001,R_i001,200,1
+je_4,R_Income,i002,R_i002,300,1
+je_5,R_Income,i001,R_i001,,2
+je_6,B_Bank Transaction,i001,B_i001,400,1
+je_7,,,_,,1
