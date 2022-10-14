@@ -8,7 +8,7 @@ from tkinter import scrolledtext
 
 """Variables"""
 title_text = 'Split Script'
-win_size = "640x480"
+win_size = "840x480"
 
 
 """ Bssic Settings """
@@ -16,30 +16,83 @@ win_size = "640x480"
 app = Tk()
 app.title(title_text)
 app.geometry(win_size)
+app.focus()
 
 
 """click event"""
 def upload():
-	label_txt.set( F"Path of your uploaded srt file should appear here")
+	filetype = [
+	("Scripts File", "*.srt"),
+	("All Files", "*.*")
+	]
+
+	path_open = filedialog.askopenfilename(
+		title = 'Open SRT file',
+		filetypes = filetype,
+		defaultextension = '.srt'
+		)
+
+	open_dirname = dirname(path_open)
+	open_basename = splitext(basename(path_open))[0]
+	open_ext = splitext(basename(path_open))[1]
+
+	open_file_info = f"path open: {path_open}\npath dir: {open_dirname}\nbasename: {open_basename}\nextension: {open_ext}"
+
+	label_txt.set(f"You've uploaded the srt file from {path_open}")
+
+	open_path_txt = Path(path_open).read_text(encoding='utf-8')
+
 	preview.delete(1.0, END)
-	preivew.insert(END, f"Text from your uploaded srt file should appear here!")
+	# preview.insert(END, f"Your script prview here")
+	preview.insert(END, open_path_txt)
+
+	dir_txt.set(open_file_info)
+
+def download():
+	filetype = [
+	("Scripts File", "*.srt"),
+	("All Files", "*.*")
+	]
+
+	save_path = filedialog.askdirectory(
+		title = 'Save SRT here'
+		)
+	output.delete(1.0, END)
+	output.insert(END, f"Your saved file path is as follows:\n{save_path}_eng.srt and {save_path}_can.srt")
 
 
 """  Elements  """
-# create a button to upload file
+# create a upload_btn to upload file
 label_txt = StringVar()
-label = Label(app, textvariable=label_txt)
-button = Button(app, text='Upload File', activebackground='white', activeforeground='black', command=upload)
+label_txt.set(f"Your uploaded srt file should appear here")
+
+dir_txt = StringVar()
+dir_txt.set(f"Your uploaded path info should appear here")
+output_dir_txt = StringVar()
+output_dir_txt.set(f"Your output text should appear here")
+
+label = Label(app, textvariable=label_txt, justify=CENTER)
+
+upload_btn = Button(app, text='Upload File', activebackground='white', activeforeground='black', command=upload)
+download_btn = Button(app, text='Download File', activebackground='white', activeforeground='black', command=download)
+
+preview_dir = Label(app, textvariable=output_dir_txt, justify=LEFT)
+
 preview = scrolledtext.ScrolledText(app, width = 50, height=50)
+output = scrolledtext.ScrolledText(app, width = 50, height=50)
 
 
 """ binding """
 
-
 """ layout """
-label.grid(row=0, column=1)
-button.grid(row=1, column=1)
-preview.grid(row=2, column=1)
+label.grid(row=2, column=1)
+upload_btn.grid(row=1, column=1)
+download_btn.grid(row=1,column=2)
+preview.grid(row=3, column=1)
+preview_dir.grid(row=2, column=2)
+output.grid(row=3,column=2)
+
+
 
 app.mainloop()
 
