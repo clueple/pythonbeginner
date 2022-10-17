@@ -8,7 +8,9 @@ from tkinter import scrolledtext
 
 """Variables"""
 title_text = 'Split Script'
-win_size = "840x480"
+win_size = "1280x480"
+warn_msg_upload_srt = f"Please upload caption file (.srt)" #warning message when no caption file is uploaded
+download_txt = f"Press [Download]"
 
 
 """ Bssic Settings """
@@ -17,80 +19,96 @@ app = Tk()
 app.title(title_text)
 app.geometry(win_size)
 app.focus()
+label1_default_txt = 'Upload Your Bilingual Script Here'
+label2_default_txt = 'Language(Top) Output Text'
+label3_default_txt = 'Language(Bottom) Output Text'
+
+
+"""file type choices"""
+open_file_type = [
+	("Scripts File", "*.srt"),
+	("All Files", "*.*")
+	]
+
+save_file_type = [("srt", "*.srt")]
+
+"""Path Info For file opened or saved"""
+def file_info(path):
+	foldername = dirname(path)
+	filename = splitext(basename(path))[0]
+	ext = splitext(basename(path))[1]
+	fileinfo = f"Folder name: {foldername}\nFile name: {filename}\nextension: {ext}"
+	return fileinfo
 
 
 """click event"""
 def upload():
-	filetype = [
-	("Scripts File", "*.srt"),
-	("All Files", "*.*")
-	]
 
 	path_open = filedialog.askopenfilename(
 		title = 'Open SRT file',
-		filetypes = filetype,
+		filetypes = open_file_type,
 		defaultextension = '.srt'
 		)
 
-	open_dirname = dirname(path_open)
-	open_basename = splitext(basename(path_open))[0]
-	open_ext = splitext(basename(path_open))[1]
-
-	open_file_info = f"path open: {path_open}\npath dir: {open_dirname}\nbasename: {open_basename}\nextension: {open_ext}"
-
-	label_txt.set(f"You've uploaded the srt file from {path_open}")
-
 	open_path_txt = Path(path_open).read_text(encoding='utf-8')
 
-	preview.delete(1.0, END)
-	# preview.insert(END, f"Your script prview here")
-	preview.insert(END, open_path_txt)
+	text_area1.delete(1.0, END)
+	text_area1.insert(END, open_path_txt)
 
-	dir_txt.set(open_file_info)
+	label1_txt.set(f"Source File:\n{file_info(path=path_open)}")
 
 def download():
-	filetype = [
-	("Scripts File", "*.srt"),
-	("All Files", "*.*")
-	]
 
 	save_path = filedialog.askdirectory(
 		title = 'Save SRT here'
 		)
-	output.delete(1.0, END)
-	output.insert(END, f"Your saved file path is as follows:\n{save_path}_eng.srt and {save_path}_can.srt")
+
+	top_lang_output = "Top Language Result"
+	bottom_lang_output = "Bottom Language Result"
+
+	text_area2.delete(1.0, END)
+	text_area2.insert(END, top_lang_output)
+
+	text_area3.delete(1.0, END)
+	text_area3.insert(END, bottom_lang_output)
+
 
 
 """  Elements  """
-# create a upload_btn to upload file
-label_txt = StringVar()
-label_txt.set(f"Your uploaded srt file should appear here")
+"""label text variables"""
+label1_txt = StringVar()
+label2_txt = StringVar()
+label3_txt = StringVar()
 
-dir_txt = StringVar()
-dir_txt.set(f"Your uploaded path info should appear here")
-output_dir_txt = StringVar()
-output_dir_txt.set(f"Your output text should appear here")
+label1 = Label(app, textvariable=label1_txt, justify=CENTER)
+label2 = Label(app, textvariable=label2_txt, justify=CENTER)
+label3 = Label(app, textvariable=label3_txt, justify=CENTER)
 
-label = Label(app, textvariable=label_txt, justify=CENTER)
 
 upload_btn = Button(app, text='Upload File', activebackground='white', activeforeground='black', command=upload)
 download_btn = Button(app, text='Download File', activebackground='white', activeforeground='black', command=download)
 
-preview_dir = Label(app, textvariable=output_dir_txt, justify=LEFT)
-
-preview = scrolledtext.ScrolledText(app, width = 50, height=50)
-output = scrolledtext.ScrolledText(app, width = 50, height=50)
-
+text_area1 = scrolledtext.ScrolledText(app, width = 50, height=50)
+text_area2 = scrolledtext.ScrolledText(app, width = 50, height=50)
+text_area3 = scrolledtext.ScrolledText(app, width = 50, height=50)
 
 """ binding """
+label1_txt.set(label1_default_txt)
+label2_txt.set(label2_default_txt)
+label3_txt.set(label3_default_txt)
+
 
 """ layout """
-label.grid(row=2, column=1)
 upload_btn.grid(row=1, column=1)
-download_btn.grid(row=1,column=2)
-preview.grid(row=3, column=1)
-preview_dir.grid(row=2, column=2)
-output.grid(row=3,column=2)
+download_btn.grid(row=1,column=2, columnspan=2)
+
+label1.grid(row=2, column=1)
+label2.grid(row=2, column=2)
+label3.grid(row=2,column=3)
+
+text_area1.grid(row=3, column=1)
+text_area2.grid(row=3,column=2)
+text_area3.grid(row=3,column=3)
 
 
 
@@ -140,6 +158,6 @@ timestamp_shift: get the line index of each timecode (for each srt_index)
 
 # bilingual script in srt format
 # b_srt = r'G:/pytube_vid/edit3_combine_part5.srt'
-#preview
+#text_area1
 # top = split_text(file=b_srt, target_lang='top')
 # bottom = split_text(file=b_srt, target_lang='bottom')
