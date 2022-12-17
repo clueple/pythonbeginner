@@ -24,11 +24,28 @@ app.title(title_txt)
 # functions
 # press the translate button to translate whatever entered in entry1 to English
 def press_translate():
-	src_text = entry1.get()
-	lang_detected = trans.detect(src_text).lang
-	trans_txt = trans.translate(entry1.get(), dest='en')
-	output1.delete(1.0, END)
-	output1.insert(END, trans_txt.text)
+	# src_text = entry1.get()
+	# lang_detected = trans.detect(src_text).lang
+	# trans_txt = trans.translate(entry1.get(), dest='en')
+	# output1.delete(1.0, END)
+	# output1.insert(END, trans_txt.text)
+	lang_list = ['it', 'de', 'fr', 'ja', 'zh-TW', 'es']
+	color_list = ['purple', 'black', 'light blue', 'dark blue', 'green', 'red']
+	d_lang_list = ['Italiano', 'Deutsch', 'Francase', '日本語', '廣東話', 'Espanol']
+
+
+	src_txt = entry1.get()
+	lang_detect = trans.detect(src_txt).lang 
+	for i in range(len(lang_list)):
+		frame = ctk.CTkFrame(app, fg_color=color_list[i])
+		label=ctk.CTkLabel(frame, text=d_lang_list[i], text_color='white')
+		output=ctk.CTkTextbox(frame, width=200, height=25)
+
+		frame.pack(padx=20, pady=10, fill=X, expand=True)
+		label.pack(padx=10, pady=10, side=LEFT)
+		output.pack(padx=10, pady=10, fill=X, expand=True)
+
+
 
 # translate whatever entered into the entry widget (entry1) to English
 def to_eng(e):
@@ -44,6 +61,7 @@ def to_eng(e):
 # create frames
 frame1 = ctk.CTkFrame(app)
 frame2 = ctk.CTkFrame(app, fg_color='Red')
+
 
 # input text area
 entry1 = ctk.CTkEntry(frame1, width=600, height=25, placeholder_text='Enter Text Here', border_width=2, corner_radius=10)
@@ -61,8 +79,11 @@ frame2.pack(padx=20, pady=10, fill=X, expand=True)
 label1.pack(padx=10, pady=10, side=LEFT)
 output1.pack(padx=10, pady=10, fill=X, expand=True)
 
+
+
 # bind
 entry1.bind('<KeyRelease>', to_eng)
+
 
 
 app.mainloop()
