@@ -18,10 +18,10 @@ def handle_upload(e: events.UploadEventArguments):
 src_file = ui.upload(auto_upload=True, on_upload=handle_upload)
 
 # text area to preview uploaded content
-preview = ui.textarea(label="Uploaded Content").style("width: 75%; height:200px ; border:solid 1px orange; resize: none; padding: 12px 12px")
+preview = ui.textarea(label="Uploaded Content").props('clearable').style("width: 75%; height:200px ; border:solid 1px orange; resize: none; padding: 12px 12px")
 
 # text are
-result = ui.textarea(label="Translated Content").style("width: 75%; height:200px ; border:solid 1px orange; resize: none; padding: 12px 12px")
-  
-ui.update()
+result = ui.textarea(label="Translated Content").props('clearable').style("width: 75%; height:200px ; border:solid 1px orange; resize: none; padding: 12px 12px")
+
+# ui.run(native=True, reload=False)
 ui.run()
