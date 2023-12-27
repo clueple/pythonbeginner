@@ -21,6 +21,10 @@ lang = {
     "dname": ['English','Italiano', 'Deutsch', 'Français', '日本語', '廣東話', 'Español']
 }
 
+"""dictionary to return the language code based on language selection"""
+lang_code_dict = { lang['dname'][idx]: lang['code'][idx]  for idx, i in enumerate(lang['dname'])}
+
+
 """element style"""
 def txt_area_style() -> dict:
 	return {
@@ -59,11 +63,15 @@ def main(page:Page):
 	"""events"""
 	def show_result(e):
 		"""translate the input text area ('inp_txt') and display the result in the 'result' area"""
+
+		#return the language code based on the language selection dropbox value
+		lang_code = lang_code_dict[lang_select.value]
 	
 		#sentence list 1 - tokenize the input text, store it in a list, 's_list'
 		s_list = wt(inp_txt.value)
 		# translate each token in s_list and translate it into target language
-		t_list = [i for idx, i in enumerate(s_list)]
+		t_list = [str(gt(source='auto', target=lang_code,).translate(i) or ' ')for i in s_list]
+
 		result.value = t_list
 		page.update()
 
