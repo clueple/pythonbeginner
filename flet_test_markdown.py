@@ -45,6 +45,7 @@ def drop_style() -> dict:
 	'options': [ft.dropdown.Option(i) for idx, i in enumerate(lang['dname'])],
 	'label': 'Target Language',
 	'hint_text': 'English',
+	'value': 'English'
 	}
 
 """main app"""
@@ -79,7 +80,7 @@ def main(page:Page):
 	inp_txt = TextField(**txt_area_style(), label='Source Text', hint_text='Enter sentence here to be translated', on_change=show_result)
 	result = Markdown(**md_style())
 	# lang_select = Dropdown(options= [ft.dropdown.Option(i) for idx, i in enumerate(lang['dname'])])
-	lang_select = Dropdown(**drop_style())
+	lang_select = Dropdown(**drop_style(), on_change=show_result)
 	
 
 	"""layout"""
