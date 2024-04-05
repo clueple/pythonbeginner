@@ -1,44 +1,44 @@
-import flet as ft 
-from flet import TextField, GridView, Page, Column, Row, SearchBar, app, Container, Text
+import flet as ft
+from flet import TextField, ListView, Page, ListTile, app, SearchBar
 
-"""backend stuff"""
+def main(page: Page):
+    # Define the list of languages
+    all_lang = ['English', 'Japanese', 'Cantonese', 'English Canadian']
 
-"""main app"""
-def main(page:Page):
-	pass
+    # Function to handle search bar input changes
+    def handle_change(e):
+        # Clear the current list view
+        lv.controls.clear()
+        # Filter and append languages that contain the search query
+        search_query = e.control.value.lower()
+        for lang in all_lang:
+            if search_query in lang.lower():
+                lv.controls.append(ListTile(title=ft.Text(lang), on_click=close_anchor, data=lang))
+        # Update the list view to show the filtered results
+        lv.update()
 
-	""" backend """
-	all_lang = ['English', 'Japanese', 'Cantonese','English Canadian']
+    # Function to handle selection from the list view
+    def close_anchor(e):
+        # Get the selected language
+        selected_lang = e.control.data
+        # Set the search bar text to the selected language
+        ele2.value = selected_lang
+        # Update the search bar to reflect the selected language
+        ele2.update()
 
-	"""theme settings"""
+    # Create a list view for displaying the search results
+    lv = ListView()
 
-	"""events"""
-	def handle_change(e):
-		ele3.value= e.data
-		page.update()
+    # Create a search bar element
+    ele2 = SearchBar(
+        bar_hint_text="Type to search...",
+        on_change=handle_change,
+        controls=[lv]
+    )
 
-	def close_anchor(e):
-		text = e.control.data
-		ele2.close_view(text)
+    # Add the search bar to the page
+    page.add(ele2)
 
-	"""elements"""
-	ele1 = TextField('Element1')
-	ele2 = SearchBar(
-		divider_color=ft.colors.AMBER,
-		bar_hint_text='bar hint text',
-		view_hint_text='view hint text',
-		on_change = handle_change,
-		controls=[ft.ListTile(title=Text(f"{i}"),on_click=close_anchor,data=i) for i in all_lang]
-		)
-	ele3= TextField('Element3')
-
-	"""layout"""
-	page.add(
-		ele1,
-		ele2,
-		ele3
-		)
-
-"""run the flet app"""
+# Run the Flet app
 if __name__ == '__main__':
     app(target=main)
